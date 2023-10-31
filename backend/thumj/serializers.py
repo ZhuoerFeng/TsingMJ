@@ -7,6 +7,10 @@ class TestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PaipuSerializer(serializers.ModelSerializer):
+    
+    score_list = serializers.JSONField()
+    
     class Meta:
         model = Paipu
-        fields = '__all__'
+        fields = ['id', 'ref', 'log', 'ratingc', 'rule', 'lobby', 'dan', 'rate', 'sx', 'name', 'title', 'sc', 'score_list']
+        

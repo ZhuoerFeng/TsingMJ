@@ -21,3 +21,13 @@ class Paipu(models.Model):
     sx = models.JSONField()
     name = models.JSONField()
     title = models.JSONField()
+    sc = models.JSONField()
+    
+    @property
+    def score_list(self):
+        scores = list()
+        for ju in self.log:
+            scores.append(ju[1])
+        sc = self.sc
+        scores.append(sc[::2])
+        return scores
