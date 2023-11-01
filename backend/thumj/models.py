@@ -11,6 +11,7 @@ class Test(models.Model):
 
 class Paipu(models.Model):
     # players = models.JSONField()
+    match_name = models.CharField(max_length=200)
     ref = models.CharField(max_length=200)
     log = models.JSONField()
     ratingc = models.CharField(max_length=100)

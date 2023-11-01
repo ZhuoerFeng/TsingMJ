@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -75,31 +76,56 @@ class PaipuList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
-class PaipuDetail(APIView):
+    
+class PaipuDetailByName(APIView):
     """
     GET: return the score list of four players
     """
-    def get_object(self, pk):
-        try:
-            return Paipu.objects.get(pk=pk)
-        except Paipu.DoesNotExist:
-            raise Http404
+    def get_object_by_name(self, match_name):
+        return get_object_or_404(Paipu, match_name=match_name)
+
         
-    def get(self, request, pk, format=None):
-        paipu = self.get_object(pk)
+    def get(self, request, match_name: str, format=None):
+        paipu = self.get_object_by_name(match_name)
         serializer = PaipuSerializer(paipu)
         return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        paipu = self.get_object(pk)
+    def put(self, request, match_name: str, format=None):
+        paipu = self.get_object_by_name(match_name)
         serializer = PaipuSerializer(paipu, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, pk, format=None):
-        paipu = self.get_object(pk)
+    def delete(self, request, match_name: str, format=None):
+        paipu = self.get_object_by_name(match_name)
+        paipu.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class PaipuDetailById(APIView):
+    """
+    GET: return the score list of four players
+    """
+    def get_object_by_id(self, pk):
+        return Paipu.objects.get(pk=pk)
+
+    def get(self, request, pk: int, format=None):
+        paipu = self.get_object_by_id(pk)
+        serializer = PaipuSerializer(paipu)
+        return Response(serializer.data)
+
+    def put(self, request, pk: int, format=None):
+        paipu = self.get_object_by_id(pk)
+        serializer = PaipuSerializer(paipu, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk: int, format=None):
+        paipu = self.get_object_by_id(pk)
         paipu.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     

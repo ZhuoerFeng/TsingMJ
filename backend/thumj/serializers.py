@@ -8,9 +8,9 @@ class TestSerializer(serializers.ModelSerializer):
 
 class PaipuSerializer(serializers.ModelSerializer):
     
-    score_list = serializers.JSONField()
+    score_list = serializers.JSONField(read_only=True)
     
     class Meta:
         model = Paipu
-        fields = ['id', 'ref', 'log', 'ratingc', 'rule', 'lobby', 'dan', 'rate', 'sx', 'name', 'title', 'sc', 'score_list']
+        fields = ['id', 'ref', 'ratingc', 'log', 'rule', 'lobby', 'dan', 'rate', 'sx', 'name', 'title', 'sc', 'score_list', "match_name"]
         
